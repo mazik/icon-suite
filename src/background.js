@@ -21,7 +21,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    title: "Icon Suite",
+    title: app.name,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/configuration.html#node-integration for more info
