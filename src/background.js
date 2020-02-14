@@ -21,6 +21,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    title: "Icon Suite",
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/configuration.html#node-integration for more info
@@ -37,6 +38,10 @@ function createWindow() {
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
   }
+
+  win.on("page-title-updated", event => {
+    event.preventDefault();
+  });
 
   win.on("closed", () => {
     win = null;
