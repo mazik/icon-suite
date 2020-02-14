@@ -11,6 +11,8 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
+let willQuitApp = false;
+
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
@@ -47,6 +49,15 @@ function createWindow() {
     event.preventDefault();
   });
 
+  win.on("close", event => {
+    if (willQuitApp) {
+      win = null;
+    } else {
+      event.preventDefault();
+      win.hide();
+    }
+  });
+
   win.on("closed", () => {
     win = null;
   });
@@ -67,6 +78,8 @@ app.on("activate", () => {
   if (win === null) {
     createWindow();
   }
+
+  win.show();
 });
 
 // This method will be called when Electron has finished
@@ -87,6 +100,10 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+});
+
+app.on("before-quit", () => {
+  willQuitApp = true;
 });
 
 // Make this app a single instance app.
