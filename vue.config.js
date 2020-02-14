@@ -6,7 +6,8 @@ module.exports = {
           args[0].title = "Icon Suite";
           return args;
         });
-      }
+      },
+      nodeIntegration: true
     }
   }
 };
