@@ -6,6 +6,7 @@ import {
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
+import readdirRecursive from "@aboviq/readdir-recursive";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -100,6 +101,19 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+  getAllFiles("/Users/mazik/Downloads/new-icons").then(response => {
+    let icons = [];
+
+    response.forEach(item => {
+      icons.push({
+        icon: require("fs")
+          .readFileSync(item)
+          .toString()
+      });
+    });
+
+    console.log(icons);
+  });
 });
 
 app.on("before-quit", () => {
@@ -140,4 +154,15 @@ if (isDevelopment) {
       app.quit();
     });
   }
+}
+
+async function getAllFiles(path) {
+  const onlySvgFiles = ({ file }) => /.svg/.test(file);
+  const ignoreGitDirectory = ({ stats, dir }) =>
+    stats.isDirectory() && dir !== ".git";
+
+  return await readdirRecursive(path, {
+    filter: onlySvgFiles,
+    recurse: ignoreGitDirectory
+  });
 }
