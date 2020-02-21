@@ -3,8 +3,8 @@
     <header class="flex items-center border-b leading-loose">
       <div class="w-64 flex-none p-2">
         <button
-          class="flex items-center w-full px-4 border rounded bg-white outline-none focus:shadow-outline"
           @click="importIcon"
+          class="flex items-center w-full px-4 border rounded bg-white outline-none focus:shadow-outline"
         >
           <svg
             class="w-4 h-4 mr-2"
@@ -133,7 +133,10 @@
         </section>
       </aside>
       <main class="relative flex flex-col flex-grow border-l border-r">
-        <section class="flex flex-wrap justify-between overflow-y-scroll">
+        <section
+          v-if="icons.length"
+          class="flex flex-wrap justify-between overflow-y-scroll"
+        >
           <button
             class="relative w-32 h-32 bg-gray-100 m-4 p-4 flex flex-col items-center outline-none focus:shadow-outline"
             v-for="(icon, index) in icons"
@@ -144,6 +147,19 @@
               class="mt-auto w-24 text-xs truncate"
               v-text="icon.name"
             ></span>
+          </button>
+        </section>
+        <section
+          v-else
+          class="flex flex-col h-full items-center justify-center overflow-y-scroll leading-loose"
+        >
+          <EmptyIllustration />
+          <h2 class="text-2xl font-semibold text-gray-900">No Icons to Show</h2>
+          <button
+            @click="importIcon"
+            class="text-sm border rounded shadow px-3 py-1 tracking-wider bg-gray-100 text-gray-900 outline-none focus:shadow-outline"
+          >
+            Select an icons directory to import
           </button>
         </section>
         <p
@@ -162,9 +178,13 @@
 
 <script>
 import { ipcRenderer } from "electron";
+import EmptyIllustration from "@/components/EmptyIllustration.vue";
 
 export default {
   name: "Home",
+  components: {
+    EmptyIllustration
+  },
   data() {
     return {
       icons: []
