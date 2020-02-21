@@ -2,15 +2,21 @@
   <section class="flex flex-col h-screen">
     <header class="flex items-center border-b leading-loose">
       <div class="w-64 flex-none p-2">
-        <svg
-          class="w-6 h-6"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          class="flex items-center w-full px-4 border rounded bg-white outline-none focus:shadow-outline"
+          @click="importIcon"
         >
-          <path
-            d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 110-20 10 10 0 010 20zm0-2a8 8 0 100-16 8 8 0 000 16z"
-          />
-        </svg>
+          <svg
+            class="w-4 h-4 mr-2"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 110-20 10 10 0 010 20zm0-2a8 8 0 100-16 8 8 0 000 16z"
+            />
+          </svg>
+          Import
+        </button>
       </div>
       <div class="border-l border-r w-full p-2">
         <div class="w-4/5 flex-grow-0 m-auto">
@@ -130,16 +136,14 @@
         <section class="flex flex-wrap justify-between overflow-y-scroll">
           <button
             class="relative w-32 h-32 bg-gray-100 m-4 p-4 flex flex-col items-center outline-none focus:shadow-outline"
+            v-for="(icon, index) in icons"
+            :key="index"
           >
-            <span class="w-12 h-12">
-              <svg viewBox="0 0 24 24">
-                <path
-                  class="fill-current"
-                  d="M11 23a2 2 0 01-2-2v-2h6v2a2 2 0 01-2 2h-2m1-22c.71 0 1.39.09 2.05.26C15.22 2.83 16 5.71 16 9c0 2.28-.38 4.37-1 7a2 2 0 01-2 2h-2a2 2 0 01-2-2c-.62-2.63-1-4.72-1-7 0-3.29.78-6.17 1.95-7.74C10.61 1.09 11.29 1 12 1m8 7c0 3.18-1.85 7.92-4.54 9.21C16.41 15.39 17 11.83 17 9c0-2.83-.59-5.39-1.54-7.21C18.15 3.08 20 4.82 20 8M4 8c0-3.18 1.85-4.92 4.54-6.21C7.59 3.61 7 6.17 7 9s.59 6.39 1.54 8.21C5.85 15.92 4 11.18 4 8z"
-                />
-              </svg>
-            </span>
-            <span class="mt-auto w-24 text-xs truncate">airballon</span>
+            <span class="w-12 h-12" v-html="icon.icon"></span>
+            <span
+              class="mt-auto w-24 text-xs truncate"
+              v-text="icon.name"
+            ></span>
           </button>
         </section>
         <p
@@ -157,7 +161,22 @@
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+
 export default {
-  name: "Home"
+  name: "Home",
+  data() {
+    return {
+      icons: []
+    };
+  },
+  created() {
+    ipcRenderer.on("get-icon-svg", (event, icons) => (this.icons = icons));
+  },
+  methods: {
+    importIcon() {
+      ipcRenderer.send("import-icon-path");
+    }
+  }
 };
 </script>

@@ -1,12 +1,14 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import fs from "fs";
+import Path from "path";
+import readdirRecursive from "@aboviq/readdir-recursive";
+import { app, protocol, BrowserWindow, dialog, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
-import readdirRecursive from "@aboviq/readdir-recursive";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -101,19 +103,24 @@ app.on("ready", async () => {
     }
   }
   createWindow();
-  getAllFiles("/Users/mazik/Downloads/new-icons").then(response => {
-    let icons = [];
+});
 
-    response.forEach(item => {
-      icons.push({
-        icon: require("fs")
-          .readFileSync(item)
-          .toString()
+ipcMain.on("import-icon-path", event => {
+  dialog
+    .showOpenDialog(win, {
+      buttonLabel: "Import",
+      properties: ["openDirectory"]
+    })
+    .then(result => {
+      if (result.canceled) return;
+
+      getAllSvgIcons(result.filePaths.toString()).then(response => {
+        event.reply("get-icon-svg", response);
       });
+    })
+    .catch(error => {
+      dialog.showErrorBox("An error occurred during import", error.toString());
     });
-
-    console.log(icons);
-  });
 });
 
 app.on("before-quit", () => {
@@ -164,5 +171,21 @@ async function getAllFiles(path) {
   return await readdirRecursive(path, {
     filter: onlySvgFiles,
     recurse: ignoreGitDirectory
+  });
+}
+
+async function getAllSvgIcons(path) {
+  return await getAllFiles(path).then(response => {
+    let icons = [];
+
+    response.forEach(item => {
+      icons.push({
+        name: Path.basename(item),
+        author: Path.basename(Path.dirname(item)),
+        icon: fs.readFileSync(item).toString()
+      });
+    });
+
+    return icons;
   });
 }
