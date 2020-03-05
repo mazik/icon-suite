@@ -34,6 +34,7 @@
               </svg>
             </span>
             <input
+              v-model="search"
               class="rounded border w-full pl-8 outline-none focus:shadow-outline placeholder-gray-600"
               type="text"
               placeholder="Find in All Sets"
@@ -139,7 +140,7 @@
         >
           <button
             class="relative w-32 h-32 bg-gray-100 m-4 p-4 flex flex-col items-center outline-none focus:shadow-outline"
-            v-for="(icon, index) in icons"
+            v-for="(icon, index) in filteredIcons"
             :key="index"
           >
             <span class="w-12 h-12" v-html="icon.icon"></span>
@@ -187,7 +188,8 @@ export default {
   },
   data() {
     return {
-      icons: []
+      icons: [],
+      search: ""
     };
   },
   created() {
@@ -196,6 +198,13 @@ export default {
   methods: {
     importIcon() {
       ipcRenderer.send("import-icon-path");
+    }
+  },
+  computed: {
+    filteredIcons() {
+      return this.icons.filter(icon => {
+        return icon.name.toLowerCase().includes(this.search.toLowerCase());
+      });
     }
   }
 };
