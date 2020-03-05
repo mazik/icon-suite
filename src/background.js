@@ -1,6 +1,7 @@
 "use strict";
 
 import fs from "fs";
+import svgo from "svgo";
 import Path from "path";
 import readdirRecursive from "@aboviq/readdir-recursive";
 import { app, protocol, BrowserWindow, dialog, ipcMain } from "electron";
@@ -178,14 +179,31 @@ async function getAllSvgIcons(path) {
   return await getAllFiles(path).then(response => {
     let icons = [];
 
-    response.forEach(item => {
+    response.forEach(async item => {
       icons.push({
         name: Path.basename(item),
         author: Path.basename(Path.dirname(item)),
-        icon: fs.readFileSync(item).toString()
+        icon: await optimizeSvg(fs.readFileSync(item).toString(), item)
       });
     });
 
     return icons;
   });
+}
+
+async function optimizeSvg(svg, item) {
+  const result = await new svgo({
+    plugins: [
+      {
+        removeDimensions: true
+      },
+      {
+        removeAttrs: {
+          attrs: "(stroke|fill|class)"
+        }
+      }
+    ]
+  }).optimize(svg, { path: item });
+
+  return result.data;
 }

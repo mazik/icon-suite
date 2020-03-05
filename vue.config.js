@@ -9,7 +9,8 @@ module.exports = {
         config.plugins.delete("workbox");
         config.plugins.delete("pwd");
       },
-      nodeIntegration: true
+      nodeIntegration: true,
+      externals: ["svgo"]
     }
   }
 };
