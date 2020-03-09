@@ -135,7 +135,7 @@
       </aside>
       <main class="relative flex flex-col flex-grow border-l border-r">
         <section
-          v-if="icons.length"
+          v-if="filteredIcons.length"
           class="flex flex-wrap justify-between overflow-y-scroll"
         >
           <button
@@ -178,6 +178,7 @@
 </template>
 
 <script>
+import { debounce } from "lodash";
 import { ipcRenderer } from "electron";
 import EmptyIllustration from "@/components/EmptyIllustration.vue";
 
@@ -189,23 +190,36 @@ export default {
   data() {
     return {
       icons: [],
-      search: ""
+      search: "",
+      filteredIcons: []
     };
   },
   created() {
-    ipcRenderer.on("get-icon-svg", (event, icons) => (this.icons = icons));
+    ipcRenderer.on("get-icon-svg", (event, icons) => {
+      this.icons = icons;
+      this.filteredIcons = icons;
+    });
   },
+
+  watch: {
+    search: {
+      handler(search) {
+        this.setIconsDebounced(search);
+      },
+      immediate: true
+    }
+  },
+
   methods: {
     importIcon() {
       ipcRenderer.send("import-icon-path");
-    }
-  },
-  computed: {
-    filteredIcons() {
-      return this.icons.filter(icon => {
-        return icon.name.toLowerCase().includes(this.search.toLowerCase());
-      });
-    }
+    },
+
+    setIconsDebounced: debounce(function(search) {
+      this.filteredIcons = this.icons.filter(icon =>
+        icon.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }, 500)
   }
 };
 </script>
