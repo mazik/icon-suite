@@ -199,7 +199,7 @@ async function optimizeSvg(svg, item) {
       },
       {
         removeAttrs: {
-          attrs: "(stroke|fill|class)"
+          attrs: "(class)"
         }
       }
     ]
