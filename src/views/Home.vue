@@ -142,6 +142,8 @@
             class="relative w-32 h-32 bg-gray-100 m-4 p-4 flex flex-col items-center outline-none focus:shadow-outline"
             v-for="(icon, index) in filteredIcons"
             :key="index"
+            draggable="true"
+            @dragstart="dragStart(icon.path, $event)"
           >
             <span class="w-12 h-12" v-html="icon.icon"></span>
             <span
@@ -219,7 +221,12 @@ export default {
       this.filteredIcons = this.icons.filter(icon =>
         icon.name.toLowerCase().includes(search.toLowerCase())
       );
-    }, 500)
+    }, 500),
+
+    dragStart(path, event) {
+      event.preventDefault();
+      ipcRenderer.send("onDragStart", path);
+    }
   }
 };
 </script>

@@ -124,6 +124,14 @@ ipcMain.on("import-icon-path", event => {
     });
 });
 
+ipcMain.on("onDragStart", (event, filePath) => {
+  event.sender.startDrag({
+    file: filePath,
+    // eslint-disable-next-line no-undef
+    icon: Path.join(__static, "img/drag.png")
+  });
+});
+
 app.on("before-quit", () => {
   willQuitApp = true;
 });
@@ -181,6 +189,7 @@ async function getAllSvgIcons(path) {
 
     response.forEach(async item => {
       icons.push({
+        path: Path.join(Path.dirname(item), Path.basename(item)),
         name: Path.basename(item),
         author: Path.basename(Path.dirname(item)),
         icon: await optimizeSvg(fs.readFileSync(item).toString(), item)
