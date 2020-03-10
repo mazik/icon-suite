@@ -132,6 +132,10 @@ ipcMain.on("onDragStart", (event, filePath) => {
   });
 });
 
+ipcMain.on("error", (event, data) => {
+  dialog.showErrorBox(`An error occurred: ${event} :`, data.toString());
+});
+
 app.on("before-quit", () => {
   willQuitApp = true;
 });
