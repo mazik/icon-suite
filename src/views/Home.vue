@@ -144,6 +144,7 @@
             :key="index"
             draggable="true"
             @dragstart="dragStart(icon.path, $event)"
+            @dblclick="copy(icon.icon)"
           >
             <span class="w-12 h-12" v-html="icon.icon"></span>
             <span
@@ -166,6 +167,7 @@
           </button>
         </section>
         <p
+          v-show="tooltip"
           class="absolute right-0 bottom-0 text-xs bg-gray-700 text-white rounded p-1"
         >
           Copied to clipboard
@@ -193,6 +195,7 @@ export default {
     return {
       icons: [],
       search: "",
+      tooltip: false,
       filteredIcons: []
     };
   },
@@ -226,6 +229,20 @@ export default {
     dragStart(path, event) {
       event.preventDefault();
       ipcRenderer.send("onDragStart", path);
+    },
+
+    copy(icon) {
+      this.$copyText(icon).then(
+        () => {
+          this.tooltip = true;
+          setTimeout(() => {
+            this.tooltip = false;
+          }, 500);
+        },
+        event => {
+          ipcRenderer.send("error", event);
+        }
+      );
     }
   }
 };
