@@ -52,7 +52,12 @@
               for="stroke"
               class="block text-gray-700 text-sm font-bold mb-2"
             >
-              Stroke Width
+              <input
+                v-model="isStrokeWidthEnable"
+                class="mr-2"
+                type="checkbox"
+              />
+              Enable Stroke Width
             </label>
             <input
               v-model="strokeWidth"
@@ -63,33 +68,38 @@
               max="10"
               value="1"
               step="0.1"
+              :disabled="!isStrokeWidthEnable"
             />
           </div>
-          <div v-if="customizedSvg.includes('fill')">
+          <div>
             <label
               for="fill-color"
               class="block text-gray-700 text-sm font-bold mb-2"
             >
-              Fill Color
+              <input v-model="isFillEnable" class="mr-2" type="checkbox" />
+              Enable Fill Color
             </label>
             <input
               class="w-full rounded-lg overflow-hidden appearance-none leading-tight outline-none focus:shadow-outline"
               id="fill-color"
               type="color"
+              :disabled="!isFillEnable"
               v-model="fill"
             />
           </div>
-          <div v-if="customizedSvg.includes('stroke')">
+          <div>
             <label
               for="stroke-color"
               class="block text-gray-700 text-sm font-bold mb-2"
             >
-              Stroke Color
+              <input v-model="isStrokeEnable" class="mr-2" type="checkbox" />
+              Enable Stroke Color
             </label>
             <input
               class="w-full rounded-lg overflow-hidden appearance-none leading-tight outline-none focus:shadow-outline"
               id="stroke-color"
               type="color"
+              :disabled="!isStrokeEnable"
               v-model="stroke"
             />
           </div>
@@ -132,9 +142,12 @@ export default {
   data() {
     return {
       fill: "none",
+      isFillEnable: true,
       dimension: 50,
       stroke: "#4A5568",
-      strokeWidth: null
+      isStrokeEnable: true,
+      strokeWidth: 0,
+      isStrokeWidthEnable: true
     };
   },
 
@@ -147,29 +160,60 @@ export default {
           4
         );
 
-        if (!modifiedSvg.includes("fill")) {
-          modifiedSvg = this.insertAt(modifiedSvg, ` fill=${this.fill}`, 4);
+        if (this.isFillEnable) {
+          if (modifiedSvg.includes("fill")) {
+            modifiedSvg = modifiedSvg.replace(
+              /(fill=")(.*?)(")/,
+              `$1${this.fill}$3`
+            );
+          } else {
+            modifiedSvg = this.insertAt(modifiedSvg, ` fill="${this.fill}"`, 4);
+          }
         }
 
-        if (modifiedSvg.includes("stroke")) {
-          modifiedSvg = modifiedSvg.replace(
-            /(stroke=")(.*?)(")/,
-            `$1${this.stroke}$3`
-          );
+        if (this.isStrokeEnable) {
+          if (modifiedSvg.includes("stroke")) {
+            modifiedSvg = modifiedSvg.replace(
+              /(stroke=")(.*?)(")/,
+              `$1${this.stroke}$3`
+            );
+          } else {
+            modifiedSvg = this.insertAtPath(
+              modifiedSvg,
+              `stroke="${this.stroke}"`
+            );
+          }
         }
 
-        if (modifiedSvg.includes("stroke-width")) {
-          modifiedSvg = modifiedSvg.replace(
-            /(stroke-width=")(.*?)(")/,
-            `$1${this.strokeWidth}$3`
-          );
+        if (this.isStrokeWidthEnable) {
+          if (modifiedSvg.includes("stroke-width")) {
+            modifiedSvg = modifiedSvg.replace(
+              /(stroke-width=")(.*?)(")/,
+              `$1${this.strokeWidth}$3`
+            );
+          } else {
+            modifiedSvg = this.insertAtPath(
+              modifiedSvg,
+              `stroke-width="${this.strokeWidth}"`
+            );
+          }
         }
 
         return modifiedSvg.replace(/(fill=")(.*?)(")/, `$1${this.fill}$3`);
       },
       set() {
-        this.fill = "none";
+        this.fill = this.defaultFill(this.currentIcon.icon);
         this.dimension = 50;
+        this.stroke = this.defaultStroke(this.currentIcon.icon);
+        this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
+      }
+    }
+  },
+
+  watch: {
+    currentIcon: {
+      handler() {
+        this.fill = this.defaultFill(this.currentIcon.icon);
         this.stroke = this.defaultStroke(this.currentIcon.icon);
         this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
       }
@@ -179,6 +223,10 @@ export default {
   methods: {
     insertAt(str, sub, pos) {
       return `${str.slice(0, pos)}${sub}${str.slice(pos)}`;
+    },
+
+    insertAtPath(Svg, str) {
+      return Svg.replace(/(.*?<path)(.?)(.*?<\/svg>)/, `$1 ${str} $3`);
     },
 
     format(html) {
@@ -202,11 +250,30 @@ export default {
     },
 
     defaultStroke(Svg) {
-      return (this.stroke = Svg.match(/(stroke=")(.*?)(")/)[2]);
+      if (Svg.includes("stroke")) {
+        this.isStrokeEnable = true;
+        return (this.stroke = Svg.match(/(stroke=")(.*?)(")/)[2]);
+      }
+
+      return (this.isStrokeEnable = false);
     },
 
     defaultStrokeWidth(Svg) {
-      return (this.strokeWidth = Svg.match(/(stroke-width=")(.*?)(")/)[2]);
+      if (Svg.includes("stroke-width")) {
+        this.isStrokeWidthEnable = true;
+        return (this.strokeWidth = Svg.match(/(stroke-width=")(.*?)(")/)[2]);
+      }
+
+      return (this.isStrokeWidthEnable = false);
+    },
+
+    defaultFill(Svg) {
+      if (Svg.includes("fill")) {
+        this.isFillEnable = true;
+        return (this.strokeWidth = Svg.match(/(fill=")(.*?)(")/)[2]);
+      }
+
+      return (this.isFillEnable = false);
     }
   }
 };
