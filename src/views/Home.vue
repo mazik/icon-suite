@@ -142,6 +142,7 @@
             class="relative w-32 h-32 bg-gray-100 m-4 p-4 flex flex-col items-center outline-none focus:shadow-outline"
             v-for="(icon, index) in filteredIcons"
             :key="index"
+            @click="select(icon)"
             draggable="true"
             @dragstart="dragStart(icon.path, $event)"
             @dblclick="copy(icon.icon)"
@@ -173,9 +174,7 @@
           Copied to clipboard
         </p>
       </main>
-      <aside
-        class="bg-gray-100 w-64 flex-shrink-0 overflow-y-scroll ml-auto px-2"
-      ></aside>
+      <CustomizerPanel :isIconSelected="selected" :currentIcon="selectedIcon" />
     </main>
     <footer></footer>
   </section>
@@ -184,11 +183,13 @@
 <script>
 import { debounce } from "lodash";
 import { ipcRenderer } from "electron";
+import CustomizerPanel from "@/components/CustomizerPanel.vue";
 import EmptyIllustration from "@/components/EmptyIllustration.vue";
 
 export default {
   name: "Home",
   components: {
+    CustomizerPanel,
     EmptyIllustration
   },
   data() {
@@ -196,6 +197,8 @@ export default {
       icons: [],
       search: "",
       tooltip: false,
+      selected: false,
+      selectedIcon: {},
       filteredIcons: []
     };
   },
@@ -243,6 +246,11 @@ export default {
           ipcRenderer.send("error", event);
         }
       );
+    },
+
+    select(icon) {
+      this.selected = true;
+      this.selectedIcon = icon;
     }
   }
 };
