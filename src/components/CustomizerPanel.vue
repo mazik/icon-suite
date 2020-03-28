@@ -111,10 +111,17 @@
               v-model="stroke"
             />
           </div>
+          <hr class="my-2" />
           <div>
-            <h3 class="text-sm font-bold text-gray-700">
-              Choose <code class="font-normal">stroke-linecap</code> Style
-            </h3>
+            <label for="strokeLineCap" class="text-sm font-bold text-gray-700">
+              <input
+                v-model="isStrokeLineCapEnable"
+                id="strokeLineCap"
+                class="mr-2"
+                type="checkbox"
+              />
+              Enable <code class="font-normal">stroke-linecap</code> Style
+            </label>
             <div class="flex items-center text-gray-700">
               <input
                 type="radio"
@@ -122,6 +129,7 @@
                 id="butt"
                 value="butt"
                 v-model="strokeLineCap"
+                :disabled="!isStrokeLineCapEnable"
               />
               <label class="flex items-center" for="butt">
                 <svg
@@ -142,6 +150,7 @@
                 id="round"
                 value="round"
                 v-model="strokeLineCap"
+                :disabled="!isStrokeLineCapEnable"
               />
               <label class="flex items-center" for="round">
                 <svg
@@ -162,6 +171,7 @@
                 id="square"
                 value="square"
                 v-model="strokeLineCap"
+                :disabled="!isStrokeLineCapEnable"
               />
               <label class="flex items-center" for="square">
                 <svg
@@ -176,10 +186,17 @@
               </label>
             </div>
           </div>
-          <div class="mt-2">
-            <h3 class="text-sm font-bold text-gray-700">
-              Choose <code class="font-normal">stroke-linejoin</code> Style
-            </h3>
+          <hr class="my-2" />
+          <div>
+            <label for="strokeLineJoin" class="text-sm font-bold text-gray-700">
+              <input
+                v-model="isStrokeLineJoinEnable"
+                id="strokeLineJoin"
+                class="mr-2"
+                type="checkbox"
+              />
+              Enable <code class="font-normal">stroke-linejoin</code> Style
+            </label>
             <div class="flex items-center text-gray-700">
               <input
                 type="radio"
@@ -187,6 +204,7 @@
                 id="miter"
                 value="miter"
                 v-model="strokeLineJoin"
+                :disabled="!isStrokeLineJoinEnable"
               />
               <label class="flex items-center" for="miter">
                 <svg
@@ -221,6 +239,7 @@
                 id="strokeLineJoinRound"
                 value="round"
                 v-model="strokeLineJoin"
+                :disabled="!isStrokeLineJoinEnable"
               />
               <label class="flex items-center" for="strokeLineJoinRound">
                 <svg
@@ -252,6 +271,7 @@
                 id="bevel"
                 value="bevel"
                 v-model="strokeLineJoin"
+                :disabled="!isStrokeLineJoinEnable"
               />
               <label class="flex items-center" for="bevel">
                 <svg
@@ -283,6 +303,7 @@
                 id="miter-clip"
                 value="miter-clip"
                 v-model="strokeLineJoin"
+                :disabled="!isStrokeLineJoinEnable"
               />
               <label class="flex items-center" for="miter-clip">
                 <svg
@@ -314,6 +335,7 @@
                 id="arcs"
                 value="arcs"
                 v-model="strokeLineJoin"
+                :disabled="!isStrokeLineJoinEnable"
               />
               <label class="flex items-center" for="arcs">
                 <svg
@@ -340,7 +362,7 @@
             </div>
           </div>
         </div>
-        <hr />
+        <hr class="mb-2" />
         <h2 class="text-gray-800 font-semibold tracking-wide">
           Information
         </h2>
@@ -385,7 +407,9 @@ export default {
       strokeWidth: 0,
       isStrokeWidthEnable: true,
       strokeLineCap: false,
-      strokeLineJoin: false
+      isStrokeLineCapEnable: false,
+      strokeLineJoin: false,
+      isStrokeLineJoinEnable: false
     };
   },
 
@@ -437,28 +461,32 @@ export default {
           }
         }
 
-        if (modifiedSvg.includes("stroke-linecap")) {
-          modifiedSvg = modifiedSvg.replace(
-            /(stroke-linecap=")(.*?)(")/,
-            `$1${this.strokeLineCap}$3`
-          );
-        } else {
-          modifiedSvg = this.insertAtPath(
-            modifiedSvg,
-            `stroke-linecap="${this.strokeLineCap}"`
-          );
+        if (this.isStrokeLineCapEnable) {
+          if (modifiedSvg.includes("stroke-linecap")) {
+            modifiedSvg = modifiedSvg.replace(
+              /(stroke-linecap=")(.*?)(")/,
+              `$1${this.strokeLineCap}$3`
+            );
+          } else {
+            modifiedSvg = this.insertAtPath(
+              modifiedSvg,
+              `stroke-linecap="${this.strokeLineCap}"`
+            );
+          }
         }
 
-        if (modifiedSvg.includes("stroke-linejoin")) {
-          modifiedSvg = modifiedSvg.replace(
-            /(stroke-linejoin=")(.*?)(")/,
-            `$1${this.strokeLineJoin}$3`
-          );
-        } else {
-          modifiedSvg = this.insertAtPath(
-            modifiedSvg,
-            `stroke-linejoin="${this.strokeLineJoin}"`
-          );
+        if (this.isStrokeLineJoinEnable) {
+          if (modifiedSvg.includes("stroke-linejoin")) {
+            modifiedSvg = modifiedSvg.replace(
+              /(stroke-linejoin=")(.*?)(")/,
+              `$1${this.strokeLineJoin}$3`
+            );
+          } else {
+            modifiedSvg = this.insertAtPath(
+              modifiedSvg,
+              `stroke-linejoin="${this.strokeLineJoin}"`
+            );
+          }
         }
 
         return modifiedSvg.replace(/(fill=")(.*?)(")/, `$1${this.fill}$3`);
@@ -544,6 +572,7 @@ export default {
 
     defaultStrokeLineCap(Svg) {
       if (Svg.includes("stroke-linecap")) {
+        this.isStrokeLineCapEnable = true;
         return (this.strokeLineCap = Svg.match(
           /(stroke-linecap=")(.*?)(")/
         )[2]);
@@ -554,6 +583,7 @@ export default {
 
     defaultStrokeLineJoin(Svg) {
       if (Svg.includes("stroke-linejoin")) {
+        this.isStrokeLineJoinEnable = true;
         return (this.strokeLineJoin = Svg.match(
           /(stroke-linejoin=")(.*?)(")/
         )[2]);
