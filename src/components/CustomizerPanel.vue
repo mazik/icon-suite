@@ -103,6 +103,71 @@
               v-model="stroke"
             />
           </div>
+          <div>
+            <h3 class="text-sm font-bold text-gray-700">
+              Choose <code class="font-normal">stroke-linecap</code> Style
+            </h3>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineCapStyle"
+                id="butt"
+                value="butt"
+                v-model="strokeLineCap"
+              />
+              <label class="flex items-center" for="butt">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 6 2"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line x1="1" y1="1" x2="5" y2="1" stroke-linecap="butt" />
+                  <path d="M1,1 h4 M1,3" stroke="pink" stroke-width="0.025" />
+                </svg>
+                <code>butt</code>
+              </label>
+            </div>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineCapStyle"
+                id="round"
+                value="round"
+                v-model="strokeLineCap"
+              />
+              <label class="flex items-center" for="round">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 6 2"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line x1="1" y1="1" x2="5" y2="1" stroke-linecap="round" />
+                  <path d="M1,1 h4 M1,3" stroke="pink" stroke-width="0.025" />
+                </svg>
+                <code>round</code>
+              </label>
+            </div>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineCapStyle"
+                id="square"
+                value="square"
+                v-model="strokeLineCap"
+              />
+              <label class="flex items-center" for="square">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 6 2"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line x1="1" y1="1" x2="5" y2="1" stroke-linecap="square" />
+                  <path d="M1,1 h4 M1,3" stroke="pink" stroke-width="0.025" />
+                </svg>
+                <code>square</code>
+              </label>
+            </div>
+          </div>
         </div>
         <hr />
         <h2 class="text-gray-800 font-semibold tracking-wide">
@@ -147,7 +212,8 @@ export default {
       stroke: "#4A5568",
       isStrokeEnable: true,
       strokeWidth: 0,
-      isStrokeWidthEnable: true
+      isStrokeWidthEnable: true,
+      strokeLineCap: false
     };
   },
 
@@ -199,6 +265,18 @@ export default {
           }
         }
 
+        if (modifiedSvg.includes("stroke-linecap")) {
+          modifiedSvg = modifiedSvg.replace(
+            /(stroke-linecap=")(.*?)(")/,
+            `$1${this.strokeLineCap}$3`
+          );
+        } else {
+          modifiedSvg = this.insertAtPath(
+            modifiedSvg,
+            `stroke-linecap="${this.strokeLineCap}"`
+          );
+        }
+
         return modifiedSvg.replace(/(fill=")(.*?)(")/, `$1${this.fill}$3`);
       },
       set() {
@@ -206,6 +284,7 @@ export default {
         this.dimension = 50;
         this.stroke = this.defaultStroke(this.currentIcon.icon);
         this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
+        this.strokeLineCap = this.defaultStrokeLineCap(this.currentIcon.icon);
       }
     }
   },
@@ -216,6 +295,7 @@ export default {
         this.fill = this.defaultFill(this.currentIcon.icon);
         this.stroke = this.defaultStroke(this.currentIcon.icon);
         this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
+        this.strokeLineCap = this.defaultStrokeLineCap(this.currentIcon.icon);
       }
     }
   },
@@ -274,6 +354,16 @@ export default {
       }
 
       return (this.isFillEnable = false);
+    },
+
+    defaultStrokeLineCap(Svg) {
+      if (Svg.includes("stroke-linecap")) {
+        return (this.strokeLineCap = Svg.match(
+          /(stroke-linecap=")(.*?)(")/
+        )[2]);
+      }
+
+      return (this.strokeLineCap = false);
     }
   }
 };
