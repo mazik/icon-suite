@@ -176,6 +176,169 @@
               </label>
             </div>
           </div>
+          <div class="mt-2">
+            <h3 class="text-sm font-bold text-gray-700">
+              Choose <code class="font-normal">stroke-linejoin</code> Style
+            </h3>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineJoinStyle"
+                id="miter"
+                value="miter"
+                v-model="strokeLineJoin"
+              />
+              <label class="flex items-center" for="miter">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 9 7"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                    fill="none"
+                    stroke-linejoin="miter"
+                  />
+                  <g id="highlight">
+                    <path
+                      d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                      stroke="pink"
+                      fill="none"
+                      stroke-width="0.025"
+                    />
+                    <circle cx="1" cy="5" r="0.05" fill="pink" />
+                    <circle cx="3" cy="2" r="0.05" fill="pink" />
+                    <circle cx="5" cy="5.5" r="0.05" fill="pink" />
+                  </g>
+                </svg>
+                <code>miter</code>
+              </label>
+            </div>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineJoinStyle"
+                id="strokeLineJoinRound"
+                value="round"
+                v-model="strokeLineJoin"
+              />
+              <label class="flex items-center" for="strokeLineJoinRound">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 9 7"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                    fill="none"
+                    stroke-linejoin="round"
+                  />
+                  <g id="highlight">
+                    <path
+                      d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                      stroke="pink"
+                      fill="none"
+                      stroke-width="0.025"
+                    />
+                  </g>
+                </svg>
+                <code>round</code>
+              </label>
+            </div>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineJoinStyle"
+                id="bevel"
+                value="bevel"
+                v-model="strokeLineJoin"
+              />
+              <label class="flex items-center" for="bevel">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 9 7"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                    fill="none"
+                    stroke-linejoin="bevel"
+                  />
+                  <g id="highlight">
+                    <path
+                      d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                      stroke="pink"
+                      fill="none"
+                      stroke-width="0.025"
+                    />
+                  </g>
+                </svg>
+                <code>bevel</code>
+              </label>
+            </div>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineJoinStyle"
+                id="miter-clip"
+                value="miter-clip"
+                v-model="strokeLineJoin"
+              />
+              <label class="flex items-center" for="miter-clip">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 9 7"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                    fill="none"
+                    stroke-linejoin="miter-clip"
+                  />
+                  <g id="highlight">
+                    <path
+                      d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                      stroke="pink"
+                      fill="none"
+                      stroke-width="0.025"
+                    />
+                  </g>
+                </svg>
+                <code>miter-clip</code>
+              </label>
+            </div>
+            <div class="flex items-center text-gray-700">
+              <input
+                type="radio"
+                name="strokeLineJoinStyle"
+                id="arcs"
+                value="arcs"
+                v-model="strokeLineJoin"
+              />
+              <label class="flex items-center" for="arcs">
+                <svg
+                  class="w-24 stroke-current"
+                  viewBox="0 0 9 7"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                    fill="none"
+                    stroke-linejoin="arcs"
+                  />
+                  <g id="highlight">
+                    <path
+                      d="M1,5 a2,2 0,0,0 2,-3 a3,3 0 0 1 2,3.5"
+                      stroke="pink"
+                      fill="none"
+                      stroke-width="0.025"
+                    />
+                  </g>
+                </svg>
+                <code>arcs</code>
+              </label>
+            </div>
+          </div>
         </div>
         <hr />
         <h2 class="text-gray-800 font-semibold tracking-wide">
@@ -221,7 +384,8 @@ export default {
       isStrokeEnable: true,
       strokeWidth: 0,
       isStrokeWidthEnable: true,
-      strokeLineCap: false
+      strokeLineCap: false,
+      strokeLineJoin: false
     };
   },
 
@@ -285,6 +449,18 @@ export default {
           );
         }
 
+        if (modifiedSvg.includes("stroke-linejoin")) {
+          modifiedSvg = modifiedSvg.replace(
+            /(stroke-linejoin=")(.*?)(")/,
+            `$1${this.strokeLineJoin}$3`
+          );
+        } else {
+          modifiedSvg = this.insertAtPath(
+            modifiedSvg,
+            `stroke-linejoin="${this.strokeLineJoin}"`
+          );
+        }
+
         return modifiedSvg.replace(/(fill=")(.*?)(")/, `$1${this.fill}$3`);
       },
       set() {
@@ -293,6 +469,7 @@ export default {
         this.stroke = this.defaultStroke(this.currentIcon.icon);
         this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
         this.strokeLineCap = this.defaultStrokeLineCap(this.currentIcon.icon);
+        this.strokeLineJoin = this.defaultStrokeLineJoin(this.currentIcon.icon);
       }
     }
   },
@@ -304,6 +481,7 @@ export default {
         this.stroke = this.defaultStroke(this.currentIcon.icon);
         this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
         this.strokeLineCap = this.defaultStrokeLineCap(this.currentIcon.icon);
+        this.strokeLineJoin = this.defaultStrokeLineJoin(this.currentIcon.icon);
       }
     }
   },
@@ -372,6 +550,16 @@ export default {
       }
 
       return (this.strokeLineCap = false);
+    },
+
+    defaultStrokeLineJoin(Svg) {
+      if (Svg.includes("stroke-linejoin")) {
+        return (this.strokeLineJoin = Svg.match(
+          /(stroke-linejoin=")(.*?)(")/
+        )[2]);
+      }
+
+      return false;
     }
   }
 };
