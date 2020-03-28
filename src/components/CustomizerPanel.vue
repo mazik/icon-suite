@@ -54,6 +54,7 @@
             >
               <input
                 v-model="isStrokeWidthEnable"
+                id="stroke"
                 class="mr-2"
                 type="checkbox"
               />
@@ -62,7 +63,6 @@
             <input
               v-model="strokeWidth"
               class="w-full bg-gray-400 rounded-lg overflow-hidden appearance-none leading-tight outline-none focus:shadow-outline"
-              id="stroke"
               type="range"
               min="0.1"
               max="10"
@@ -76,12 +76,16 @@
               for="fill-color"
               class="block text-gray-700 text-sm font-bold mb-2"
             >
-              <input v-model="isFillEnable" class="mr-2" type="checkbox" />
+              <input
+                v-model="isFillEnable"
+                id="fill-color"
+                class="mr-2"
+                type="checkbox"
+              />
               Enable Fill Color
             </label>
             <input
               class="w-full rounded-lg overflow-hidden appearance-none leading-tight outline-none focus:shadow-outline"
-              id="fill-color"
               type="color"
               :disabled="!isFillEnable"
               v-model="fill"
@@ -92,12 +96,16 @@
               for="stroke-color"
               class="block text-gray-700 text-sm font-bold mb-2"
             >
-              <input v-model="isStrokeEnable" class="mr-2" type="checkbox" />
+              <input
+                v-model="isStrokeEnable"
+                id="stroke-color"
+                class="mr-2"
+                type="checkbox"
+              />
               Enable Stroke Color
             </label>
             <input
               class="w-full rounded-lg overflow-hidden appearance-none leading-tight outline-none focus:shadow-outline"
-              id="stroke-color"
               type="color"
               :disabled="!isStrokeEnable"
               v-model="stroke"
