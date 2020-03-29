@@ -1,13 +1,13 @@
 <template>
-  <aside class="bg-gray-100 w-64 flex-shrink-0 overflow-y-scroll ml-auto px-2">
-    <section class="text-gray-800 py-2">
-      <div
-        v-if="!isIconSelected"
-        class="flex flex-col h-screen items-center justify-center"
-      >
-        <p class="text-sm">No selection</p>
-      </div>
-      <div v-else>
+  <aside class="bg-gray-100 w-64 flex-shrink-0 ml-auto text-gray-700 p-2">
+    <div
+      v-if="!isIconSelected"
+      class="flex flex-col h-full items-center justify-center"
+    >
+      <p class="text-sm">No selection</p>
+    </div>
+    <div v-else class="flex flex-col h-screen overflow-y-hidden">
+      <div>
         <div v-if="customizedSvg" class="flex justify-center">
           <PreviewWidget :Svg="customizedSvg" />
         </div>
@@ -16,7 +16,9 @@
           :code="format(customizedSvg)"
           language="html"
         ></PrismEditor>
-        <hr class="my-5" />
+        <hr class="mb-4" />
+      </div>
+      <div class="overflow-y-scroll">
         <div class="flex justify-between">
           <h2 class="text-gray-800 font-semibold tracking-wide">
             Customize
@@ -124,6 +126,7 @@
             </label>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineCapStyle"
                 id="butt"
@@ -145,6 +148,7 @@
             </div>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineCapStyle"
                 id="round"
@@ -166,6 +170,7 @@
             </div>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineCapStyle"
                 id="square"
@@ -199,6 +204,7 @@
             </label>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineJoinStyle"
                 id="miter"
@@ -234,6 +240,7 @@
             </div>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineJoinStyle"
                 id="strokeLineJoinRound"
@@ -266,6 +273,7 @@
             </div>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineJoinStyle"
                 id="bevel"
@@ -298,6 +306,7 @@
             </div>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineJoinStyle"
                 id="miter-clip"
@@ -330,6 +339,7 @@
             </div>
             <div class="flex items-center text-gray-700">
               <input
+                class="ml-1"
                 type="radio"
                 name="strokeLineJoinStyle"
                 id="arcs"
@@ -362,13 +372,9 @@
             </div>
           </div>
         </div>
-        <hr class="mb-2" />
-        <h2 class="text-gray-800 font-semibold tracking-wide">
-          Information
-        </h2>
-        <InformationWidget :current="currentIcon" />
+        <InformationWidget :current="currentIcon" class="mb-20" />
       </div>
-    </section>
+    </div>
   </aside>
 </template>
 
@@ -594,3 +600,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.prism-editor-wrapper {
+  @apply h-auto;
+}
+</style>
