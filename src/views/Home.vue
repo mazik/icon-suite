@@ -232,6 +232,7 @@ export default {
   watch: {
     search: {
       handler(search) {
+        this.loading = true;
         this.setIconsDebounced(search);
       },
       immediate: true
@@ -247,6 +248,7 @@ export default {
       this.filteredIcons = this.icons.filter(icon =>
         icon.name.toLowerCase().includes(search.toLowerCase())
       );
+      this.loading = false;
     }, 500),
 
     dragStart(path, event) {
