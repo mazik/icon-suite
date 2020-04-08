@@ -136,7 +136,7 @@
               />
               <label class="flex items-center" for="butt">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 6 2"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -158,7 +158,7 @@
               />
               <label class="flex items-center" for="round">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 6 2"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -180,7 +180,7 @@
               />
               <label class="flex items-center" for="square">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 6 2"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -214,7 +214,7 @@
               />
               <label class="flex items-center" for="miter">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 9 7"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -250,7 +250,7 @@
               />
               <label class="flex items-center" for="strokeLineJoinRound">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 9 7"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -283,7 +283,7 @@
               />
               <label class="flex items-center" for="bevel">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 9 7"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -316,7 +316,7 @@
               />
               <label class="flex items-center" for="miter-clip">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 9 7"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -349,7 +349,7 @@
               />
               <label class="flex items-center" for="arcs">
                 <svg
-                  class="w-24 stroke-current"
+                  class="w-16 stroke-current"
                   viewBox="0 0 9 7"
                   xmlns="http://www.w3.org/2000/svg"
                 >
