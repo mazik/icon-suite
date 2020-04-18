@@ -5,17 +5,17 @@
       Information
     </h2>
     <ul class="text-xs text-gray-600 leading-relaxed tracking-wide">
-      <li>
+      <li data-testid="information-widget-icon-name">
         <span class="font-bold">Name:</span>
         {{ name(current.name) }}
       </li>
       <li><span class="font-bold">Type:</span> SVG</li>
-      <li>
+      <li data-testid="information-widget-icon-size">
         <span class="font-bold">Size:</span>
         {{ size(current.size) }}
       </li>
       <li><span class="font-bold">Dimensions:</span> Scalable</li>
-      <li>
+      <li data-testid="information-widget-icon-created-date">
         <span class="font-bold">Created:</span>
         {{ date(current.date) }}
       </li>
