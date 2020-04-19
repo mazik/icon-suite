@@ -6,7 +6,11 @@
     >
       <p class="text-sm">No selection</p>
     </div>
-    <div v-else class="flex flex-col h-screen overflow-y-hidden">
+    <div
+      v-else
+      data-testid="customizer-panel-show"
+      class="flex flex-col h-screen overflow-y-hidden"
+    >
       <div>
         <div v-if="customizedSvg" class="flex justify-center">
           <PreviewWidget :Svg="customizedSvg" />
