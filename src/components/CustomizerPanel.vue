@@ -601,7 +601,7 @@ export default {
         )[2]);
       }
 
-      return false;
+      return (this.isStrokeLineJoinEnable = false);
     }
   }
 };
