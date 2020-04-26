@@ -576,7 +576,7 @@ export default {
     defaultFill(Svg) {
       if (Svg.includes("fill")) {
         this.isFillEnable = true;
-        return (this.strokeWidth = Svg.match(/(fill=")(.*?)(")/)[2]);
+        return (this.fill = Svg.match(/(fill=")(.*?)(")/)[2]);
       }
 
       return (this.isFillEnable = false);
