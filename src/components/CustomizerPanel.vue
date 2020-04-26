@@ -20,13 +20,12 @@
           :code="format(customizedSvg)"
           language="html"
         ></PrismEditor>
-        <hr class="mb-4" />
-      </div>
-      <div class="overflow-y-scroll">
-        <div class="flex justify-between">
-          <h2 class="text-gray-800 font-semibold tracking-wide">
-            Customize
-          </h2>
+        <div class="flex justify-between mb-4">
+          <button
+            class="px-4 border rounded bg-white outline-none focus:shadow-outline"
+          >
+            Export
+          </button>
           <button
             @click="customizedSvg = true"
             class="px-4 border rounded bg-white outline-none focus:shadow-outline"
@@ -34,6 +33,9 @@
             Reset
           </button>
         </div>
+      </div>
+      <hr class="mb-2" />
+      <div class="overflow-y-scroll">
         <div>
           <div>
             <label
