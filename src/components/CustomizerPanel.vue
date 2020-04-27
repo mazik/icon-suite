@@ -590,7 +590,7 @@ export default {
         )[2]);
       }
 
-      return (this.strokeLineCap = false);
+      return (this.isStrokeLineCapEnable = false);
     },
 
     defaultStrokeLineJoin(Svg) {
