@@ -200,6 +200,44 @@ describe("CustomizerPanel.vue", () => {
         `stroke-linejoin="${wrapper.vm.strokeLineJoin}"`
       );
     });
+
+    it("resets all the custom styles from the SVG path if present", () => {
+      wrapper.find("#stroke").setChecked();
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-width="${wrapper.vm.strokeWidth}"`
+      );
+      wrapper.find("#fill-color").setChecked();
+      expect(wrapper.vm.customizedSvg).to.contain(`fill="${wrapper.vm.fill}"`);
+      wrapper.find("#stroke-color").setChecked();
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke="${wrapper.vm.stroke}"`
+      );
+      wrapper.find("#strokeLineCap").setChecked();
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-linecap="${wrapper.vm.strokeLineCap}"`
+      );
+      wrapper.find("#strokeLineJoin").setChecked();
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-linejoin="${wrapper.vm.strokeLineJoin}"`
+      );
+
+      wrapper.find('[data-testid="reset"]').trigger("click");
+      expect(wrapper.vm.customizedSvg).to.not.contain(
+        `stroke-width="${wrapper.vm.strokeWidth}"`
+      );
+      expect(wrapper.vm.customizedSvg).to.not.contain(
+        `fill="${wrapper.vm.fill}"`
+      );
+      expect(wrapper.vm.customizedSvg).to.not.contain(
+        `stroke="${wrapper.vm.stroke}"`
+      );
+      expect(wrapper.vm.customizedSvg).to.not.contain(
+        `stroke-linecap="${wrapper.vm.strokeLineCap}"`
+      );
+      expect(wrapper.vm.customizedSvg).to.not.contain(
+        `stroke-linejoin="${wrapper.vm.strokeLineJoin}"`
+      );
+    });
   });
 
   describe("When the current icon isn't optimized", () => {
@@ -263,6 +301,46 @@ describe("CustomizerPanel.vue", () => {
       wrapper.vm.defaultStrokeLineJoin(data.currentIcon.icon);
 
       expect(wrapper.vm.isStrokeLineJoinEnable).is.equal(true);
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-linejoin="${wrapper.vm.strokeLineJoin}"`
+      );
+    });
+
+    it("resets all the custom styles from the SVG path if present", () => {
+      wrapper.setData({
+        strokeWidth: 4,
+        fill: "blue",
+        stroke: "#ffffff",
+        strokeLineCap: "butt",
+        strokeLineJoin: "miter"
+      });
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-width="${wrapper.vm.strokeWidth}"`
+      );
+      expect(wrapper.vm.customizedSvg).to.contain(`fill="${wrapper.vm.fill}"`);
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke="${wrapper.vm.stroke}"`
+      );
+      wrapper.vm.defaultStrokeLineCap(data.currentIcon.icon);
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-linecap="${wrapper.vm.strokeLineCap}"`
+      );
+      wrapper.vm.defaultStrokeLineJoin(data.currentIcon.icon);
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-linejoin="${wrapper.vm.strokeLineJoin}"`
+      );
+
+      wrapper.find('[data-testid="reset"]').trigger("click");
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-width="${wrapper.vm.strokeWidth}"`
+      );
+      expect(wrapper.vm.customizedSvg).to.contain(`fill="${wrapper.vm.fill}"`);
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke="${wrapper.vm.stroke}"`
+      );
+      expect(wrapper.vm.customizedSvg).to.contain(
+        `stroke-linecap="${wrapper.vm.strokeLineCap}"`
+      );
       expect(wrapper.vm.customizedSvg).to.contain(
         `stroke-linejoin="${wrapper.vm.strokeLineJoin}"`
       );

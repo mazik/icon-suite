@@ -28,6 +28,7 @@
           </button>
           <button
             @click="customizedSvg = true"
+            data-testid="reset"
             class="px-4 border rounded bg-white outline-none focus:shadow-outline"
           >
             Reset
