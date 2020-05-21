@@ -22,6 +22,7 @@
         ></PrismEditor>
         <div class="flex justify-between mb-4">
           <button
+            @click="exportIcon(customizedSvg)"
             class="px-4 border rounded bg-white outline-none focus:shadow-outline"
           >
             Export
@@ -386,6 +387,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
 import PrismEditor from "vue-prism-editor";
 import PreviewWidget from "@/components/PreviewWidget.vue";
 import InformationWidget from "@/components/InformationWidget.vue";
@@ -603,6 +605,13 @@ export default {
       }
 
       return (this.isStrokeLineJoinEnable = false);
+    },
+
+    exportIcon(Svg) {
+      ipcRenderer.send("export-icon", {
+        icon: Svg,
+        name: this.currentIcon.name
+      });
     }
   }
 };

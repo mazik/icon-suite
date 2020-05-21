@@ -125,6 +125,24 @@ ipcMain.on("import-icon-path", event => {
     });
 });
 
+ipcMain.on("export-icon", (event, Svg) => {
+  dialog
+    .showSaveDialog(win, {
+      defaultPath: Svg.name,
+      nameFieldLabel: "name field",
+      properties: ["createDirectory", "showOverwriteConfirmation"]
+    })
+    .then(result => {
+      if (result.canceled) return;
+
+      try {
+        fs.writeFileSync(result.filePath, Svg.icon);
+      } catch (error) {
+        alert(`An error occurred: ${event} – ${error.toString()}`);
+      }
+    });
+});
+
 ipcMain.on("onDragStart", (event, filePath) => {
   event.sender.startDrag({
     file: filePath,
