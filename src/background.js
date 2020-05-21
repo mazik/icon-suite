@@ -117,7 +117,7 @@ ipcMain.on("import-icon-path", event => {
       event.reply("loading-status", true);
       getAllSvgIcons(result.filePaths.toString()).then(response => {
         event.reply("get-icon-svg", response);
-        event.reply("loading--status", false);
+        event.reply("loading-status", false);
       });
     })
     .catch(error => {
