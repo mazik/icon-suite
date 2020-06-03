@@ -379,6 +379,67 @@
               </label>
             </div>
           </div>
+          <div>
+            <label for="fillRule" class="text-sm font-bold text-gray-700">
+              <input
+                v-model="isFillRuleEnable"
+                id="fillRule"
+                class="mr-2"
+                type="checkbox"
+              />
+              Enable <code class="font-normal">fill-rule</code> Style
+            </label>
+            <div class="flex items-center text-gray-700">
+              <input
+                class="ml-1"
+                type="radio"
+                name="fillRule"
+                id="nonzero"
+                value="nonzero"
+                v-model="fillRule"
+                :disabled="!isFillRuleEnable"
+              />
+              <label class="flex items-center" for="nonzero">
+                <svg
+                  class="w-16"
+                  viewBox="-10 -10 220 120"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <polygon
+                    fill-rule="nonzero"
+                    stroke="red"
+                    points="50,0 21,90 98,35 2,35 79,90"
+                  />
+                </svg>
+                <code>nonzero</code>
+              </label>
+            </div>
+            <div class="flex items-center text-gray-700">
+              <input
+                class="ml-1"
+                type="radio"
+                name="fillRule"
+                id="evenodd"
+                value="evenodd"
+                v-model="fillRule"
+                :disabled="!isFillRuleEnable"
+              />
+              <label class="flex items-center" for="evenodd">
+                <svg
+                  class="w-16"
+                  viewBox="88 -10 220 120"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <polygon
+                    fill-rule="evenodd"
+                    stroke="red"
+                    points="150,0 121,90 198,35 102,35 179,90"
+                  />
+                </svg>
+                <code>evenodd</code>
+              </label>
+            </div>
+          </div>
         </div>
         <InformationWidget :current="currentIcon" class="mb-20" />
       </div>
@@ -424,7 +485,9 @@ export default {
       strokeLineCap: false,
       isStrokeLineCapEnable: false,
       strokeLineJoin: false,
-      isStrokeLineJoinEnable: false
+      isStrokeLineJoinEnable: false,
+      isFillRuleEnable: false,
+      fillRule: "nonzero"
     };
   },
 
@@ -504,12 +567,27 @@ export default {
           }
         }
 
+        if (this.isFillRuleEnable) {
+          if (modifiedSvg.includes("fill-rule")) {
+            modifiedSvg = modifiedSvg.replace(
+              /(fill-rule=")(.*?)(")/,
+              `$1${this.fillRule}$3`
+            );
+          } else {
+            modifiedSvg = this.insertAtPath(
+              modifiedSvg,
+              `fill-rule="${this.fillRule}"`
+            );
+          }
+        }
+
         return modifiedSvg.replace(/(fill=")(.*?)(")/, `$1${this.fill}$3`);
       },
       set() {
         this.fill = this.defaultFill(this.currentIcon.icon);
         this.dimension = 50;
         this.stroke = this.defaultStroke(this.currentIcon.icon);
+        this.fillRule = this.defaultFillRule(this.currentIcon.icon);
         this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
         this.strokeLineCap = this.defaultStrokeLineCap(this.currentIcon.icon);
         this.strokeLineJoin = this.defaultStrokeLineJoin(this.currentIcon.icon);
@@ -522,6 +600,7 @@ export default {
       handler() {
         this.fill = this.defaultFill(this.currentIcon.icon);
         this.stroke = this.defaultStroke(this.currentIcon.icon);
+        this.fillRule = this.defaultFillRule(this.currentIcon.icon);
         this.strokeWidth = this.defaultStrokeWidth(this.currentIcon.icon);
         this.strokeLineCap = this.defaultStrokeLineCap(this.currentIcon.icon);
         this.strokeLineJoin = this.defaultStrokeLineJoin(this.currentIcon.icon);
@@ -605,6 +684,15 @@ export default {
       }
 
       return (this.isStrokeLineJoinEnable = false);
+    },
+
+    defaultFillRule(Svg) {
+      if (Svg.includes("fill-rule")) {
+        this.isFillRuleEnable = true;
+        return (this.fillRule = Svg.match(/(fill-rule=")(.*?)(")/)[2]);
+      }
+
+      return (this.isFillRuleEnable = false);
     },
 
     exportIcon(Svg) {
