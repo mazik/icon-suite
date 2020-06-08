@@ -227,6 +227,8 @@ export default {
     ipcRenderer.on("loading-status", (event, status) => {
       this.loading = status;
     });
+
+    ipcRenderer.send("startup");
   },
 
   watch: {

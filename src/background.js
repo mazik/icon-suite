@@ -1,8 +1,9 @@
 "use strict";
-
+/* global __static */
 import fs from "fs";
 import svgo from "svgo";
 import Path from "path";
+import copyDirectory from "@mazik/fs-easy-dir-copy";
 import readdirRecursive from "@aboviq/readdir-recursive";
 import { app, protocol, BrowserWindow, dialog, ipcMain } from "electron";
 import {
@@ -104,6 +105,35 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+
+  if (!fs.existsSync(`${app.getPath("userData")}/Icons`)) {
+    try {
+      fs.mkdirSync(`${app.getPath("userData")}/Icons/`, { recursive: true });
+    } catch (error) {
+      return dialog.showErrorBox(
+        "An error occurred during Icons directory creation",
+        error.toString()
+      );
+    }
+  }
+});
+
+ipcMain.on("startup", event => {
+  if (!fs.existsSync(`${app.getPath("userData")}/Icons`)) {
+    try {
+      fs.mkdirSync(`${app.getPath("userData")}/Icons/`, { recursive: true });
+    } catch (error) {
+      return dialog.showErrorBox(
+        "An error occurred during Icons directory creation",
+        error.toString()
+      );
+    }
+  }
+
+  getAllSvgIcons(`${app.getPath("userData")}/Icons`).then(response => {
+    event.reply("get-icon-svg", response);
+    event.reply("loading-status", false);
+  });
 });
 
 ipcMain.on("import-icon-path", event => {
@@ -115,10 +145,40 @@ ipcMain.on("import-icon-path", event => {
     .then(result => {
       if (result.canceled) return;
       event.reply("loading-status", true);
-      getAllSvgIcons(result.filePaths.toString()).then(response => {
-        event.reply("get-icon-svg", response);
+
+      if (
+        fs.existsSync(
+          `${app.getPath("userData")}/Icons/${Path.basename(
+            result.filePaths.toString()
+          )}`
+        )
+      ) {
         event.reply("loading-status", false);
-      });
+
+        throw new Error("Destination folder already exists.");
+      }
+
+      copyDirectory(
+        `${result.filePaths.toString()}`,
+        `${app.getPath("userData")}/Icons/${Path.basename(
+          result.filePaths.toString()
+        )}`
+      )
+        .then(() => {
+          getAllSvgIcons(
+            `${app.getPath("userData")}/Icons/${Path.basename(
+              result.filePaths.toString()
+            )}`
+          ).then(response => {
+            event.reply("get-icon-svg", response);
+            event.reply("loading-status", false);
+          });
+        })
+        .catch(error => {
+          event.reply("loading-status", false);
+
+          throw new Error(error);
+        });
     })
     .catch(error => {
       dialog.showErrorBox("An error occurred during import", error.toString());
@@ -146,7 +206,6 @@ ipcMain.on("export-icon", (event, Svg) => {
 ipcMain.on("onDragStart", (event, filePath) => {
   event.sender.startDrag({
     file: filePath,
-    // eslint-disable-next-line no-undef
     icon: Path.join(__static, "img/drag.png")
   });
 });
