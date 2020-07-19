@@ -21,7 +21,7 @@
     "@mazik/fs-easy-dir-copy": "^1.0.6",
     "chai-as-promised": "^7.1.1",
     "core-js": "^3.6.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "register-service-worker": "^1.6.2",
     "svgo": "^1.3.2",
     "tailwindcss": "^1.2.0",
